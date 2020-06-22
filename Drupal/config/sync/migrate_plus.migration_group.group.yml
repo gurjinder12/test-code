@@ -1,0 +1,10 @@
+uuid: fa6f394f-eb23-
+langcode: en
+status: true
+dependencies: {  }
+id: group
+label: 'label'
+description: 'description'
+source_type: ''
+module: null
+shared_configuration: null

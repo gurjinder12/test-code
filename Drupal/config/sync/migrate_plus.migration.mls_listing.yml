@@ -1,0 +1,223 @@
+uuid: 740a22c1-bdc1-48fd
+langcode: en
+status: true
+dependencies: {  }
+id: mls_listing
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - json
+migration_group: group
+label: 'MLS listing import'
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  urls: 'https://..../'
+  headers:
+    Content-Type: application/x-www-form-urlencoded
+    accesskey: ---
+    apiversion: 1.7.0
+    outputtype: json
+  fields:
+    -
+      name: listingID
+      label: 'MLS listing ID'
+      selector: listingID
+    -
+      name: acres
+      label: Acres
+      selector: acres
+    -
+      name: bedrooms
+      label: Bedrooms
+      selector: bedrooms
+    -
+      name: cityName
+      label: 'City Name'
+      selector: cityName
+    -
+      name: countyName
+      label: 'County Name'
+      selector: countyName
+    -
+      name: fullBaths
+      label: 'Full Baths'
+      selector: fullBaths
+    -
+      name: listingPrice
+      label: 'Listing Price'
+      selector: listingPrice
+    -
+      name: price
+      label: 'Listing Price'
+      selector: price
+    -
+      name: partialBaths
+      label: 'Partial Baths'
+      selector: partialBaths
+    -
+      name: sqFt
+      label: SqFt
+      selector: sqFt
+    -
+      name: state
+      label: State
+      selector: state
+    -
+      name: subdivision
+      label: Sub-division
+      selector: subdivision
+    -
+      name: totalBaths
+      label: 'Total Baths'
+      selector: totalBaths
+    -
+      name: subdivision
+      label: Sub-division
+      selector: subdivision
+    -
+      name: displayAddress
+      label: 'Display Address'
+      selector: displayAddress
+    -
+      name: listingOfficeID
+      label: 'Listing Office ID'
+      selector: listingOfficeID
+    -
+      name: propStatus
+      label: 'Prop Status'
+      selector: propStatus
+    -
+      name: remarksConcat
+      label: 'Remarks Concat'
+      selector: remarksConcat
+    -
+      name: zipcode
+      label: Zipcode
+      selector: zipcode
+    -
+      name: latitude
+      label: Latitude
+      selector: latitude
+    -
+      name: longitude
+      label: Longitude
+      selector: longitude
+    -
+      name: address
+      label: Address
+      selector: address
+    -
+      name: streetName
+      label: StreetName
+      selector: streetName
+    -
+      name: idxPropType
+      label: 'IDX Prop Type'
+      selector: idxPropType
+    -
+      name: mediaData
+      label: 'Media Data'
+      selector: mediaData
+    -
+      name: images
+      label: Images
+      selector: image/0/url
+    -
+      name: fullDetailsURL
+      label: 'Full Details URL'
+      selector: fullDetailsURL
+  ids:
+    listingID:
+      type: integer
+  constants:
+    file_destination: 'public://listing_images/'
+process:
+  type:
+    plugin: default_value
+    default_value: mls
+  title: listingID
+  field_remarksconcat/value: remarksConcat
+  field_listingprice: price
+  field_bedrooms: bedrooms
+  field_fullbaths: fullBaths
+  field_fulldetailsurl/uri: fullDetailsURL
+  field_sqft:
+    -
+      plugin: str_replace
+      search: ','
+      replace: ''
+      source: sqFt
+  field_propstatus:
+    -
+      plugin: str_replace
+      search: Active
+      replace: '1'
+      source: propStatus
+  field_address/country_code:
+    plugin: default_value
+    default_value: US
+  field_address/address_line1:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: address
+  field_address/administrative_area:
+    plugin: default_value
+    default_value: ..
+  field_address/postal_code:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: zipcode
+  field_address/locality:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: cityName
+  field_latlong/lat:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: latitude
+  field_latlong/lng:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: longitude
+  field_totalbaths: totalBaths
+  field_cityname:
+    -
+      plugin: entity_generate
+      source: cityName
+  field_idxproptype:
+    -
+      plugin: entity_generate
+      source: idxPropType
+  field_countyname:
+    -
+      plugin: entity_generate
+      source: cityName
+  destination_path:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: images
+    -
+      plugin: concat
+      source:
+        - constants/file_destination
+        - listingID
+        - /
+  field_image:
+    plugin: file_import
+    source: images
+    destination: '@destination_path'
+  uid:
+    plugin: default_value
+    default_value: 0
+destination:
+  plugin: 'entity:node'
+migration_dependencies: {  }

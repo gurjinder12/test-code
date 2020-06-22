@@ -1,0 +1,14 @@
+module.admin_config:
+  path: '/admin/config/module/module_settings'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Title'
+  requirements:
+    _permission: 'access administration pages'
+module.credentials_settings:
+  path: '/admin/config/module/module_settings/module_credentials'
+  defaults:
+    _form: '\Drupal\idx_broker\Form\ModuleCredential'
+    _title: 'Module credentials'
+  requirements:
+    _permission: 'access administration pages'

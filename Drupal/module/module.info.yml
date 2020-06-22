@@ -1,0 +1,5 @@
+name: module
+type: module
+description: module description.
+package: IDX Broker
+core: 8.x

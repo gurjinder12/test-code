@@ -1,0 +1,11 @@
+module.admin_config:
+  title: Module title
+  route_name: module.admin_config
+  parent: system.admin_config
+  description: 'Description.'
+  weight: 6
+module.credentials_settings:
+  title: Module Title
+  route_name: module.credentials_settings
+  parent: module.admin_config
+  description: 'Module description.'
